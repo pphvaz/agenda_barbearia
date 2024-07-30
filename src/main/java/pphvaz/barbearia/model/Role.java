@@ -1,6 +1,5 @@
 package pphvaz.barbearia.model;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -11,10 +10,14 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.springframework.security.core.GrantedAuthority;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="role")
 @SequenceGenerator(name = "seq_role",sequenceName = "seq_role",allocationSize = 1, initialValue = 1)
-public class Role implements Serializable {
+public class Role implements GrantedAuthority {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -25,6 +28,12 @@ public class Role implements Serializable {
 	@Column(nullable = false)
 	private String descricao;
 
+	@JsonIgnore
+	@Override
+	public String getAuthority() {
+		return this.descricao;
+	}	
+	
 	public Long getId() {
 		return id;
 	}
