@@ -1,0 +1,97 @@
+package pphvaz.barbearia.model;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.Objects;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+@Entity
+@Table(name = "cupom_de_desconto")
+@SequenceGenerator(name = "seq_cupom_de_desconto", sequenceName = "seq_cupom_de_desconto", initialValue = 1, allocationSize = 1)
+public class CupomDeDesconto implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_cupom_de_desconto")
+	private Long id;
+
+	@Column(nullable = false)
+	private String codigo;
+
+	private BigDecimal valorDescontoNumeric;
+
+	private BigDecimal valorDescontoPorcentagem;
+
+	@Column(nullable = false)
+	@Temporal(TemporalType.DATE)
+	private Date dtValidade;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
+	}
+
+	public BigDecimal getValorDescontoNumeric() {
+		return valorDescontoNumeric;
+	}
+
+	public void setValorDescontoNumeric(BigDecimal valorDescontoNumeric) {
+		this.valorDescontoNumeric = valorDescontoNumeric;
+	}
+
+	public BigDecimal getValorDescontoPorcentagem() {
+		return valorDescontoPorcentagem;
+	}
+
+	public void setValorDescontoPorcentagem(BigDecimal valorDescontoPorcentagem) {
+		this.valorDescontoPorcentagem = valorDescontoPorcentagem;
+	}
+
+	public Date getDtValidade() {
+		return dtValidade;
+	}
+
+	public void setDtValidade(Date dtValidade) {
+		this.dtValidade = dtValidade;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CupomDeDesconto other = (CupomDeDesconto) obj;
+		return Objects.equals(id, other.id);
+	}
+
+}
