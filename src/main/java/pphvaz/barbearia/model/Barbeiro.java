@@ -24,7 +24,7 @@ public class Barbeiro extends Pessoa {
 	private Integer anosDeExperiencia;
 	
 	@OneToOne
-	@JoinColumn(name = "agenda_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "agenda_fk"))
+	@JoinColumn(name = "agenda_id", nullable = true, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "agenda_fk"))
 	private Agenda agenda;
 	
 	@ManyToMany

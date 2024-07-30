@@ -45,8 +45,9 @@ public class Users implements UserDetails {
 	private Pessoa pessoa;
 
 	@OneToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "users_role", uniqueConstraints = @UniqueConstraint(columnNames = { "users_id",
-			"role_id" }, name = "unique_role_users"), joinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id", table = "users", unique = false, foreignKey = @ForeignKey(name = "users_fk", value = ConstraintMode.CONSTRAINT)), inverseJoinColumns = @JoinColumn(name = "role_id", unique = false, referencedColumnName = "id", table = "role", foreignKey = @ForeignKey(name = "role_fk", value = ConstraintMode.CONSTRAINT)))
+	@JoinTable(name = "users_role", uniqueConstraints = @UniqueConstraint(columnNames = { "users_id", "role_id" }, name = "unique_role_users"), 
+		joinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id", table = "users", unique = false, foreignKey = @ForeignKey(name = "users_fk", value = ConstraintMode.CONSTRAINT)), 
+		inverseJoinColumns = @JoinColumn(name = "role_id", unique = false, referencedColumnName = "id", table = "role", foreignKey = @ForeignKey(name = "role_fk", value = ConstraintMode.CONSTRAINT)))
 	private List<Role> roles;
 
 	@Override

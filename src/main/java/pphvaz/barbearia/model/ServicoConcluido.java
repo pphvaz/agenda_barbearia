@@ -78,7 +78,10 @@ public class ServicoConcluido implements Serializable {
 	private FormaDePagamento formaDePagamento;
 
 	@ManyToMany
-	@JoinTable(name = "servico_concluido_servico", joinColumns = @JoinColumn(name = "servico_concluido_id", foreignKey = @ForeignKey(name = "servico_concluido_fk")), inverseJoinColumns = @JoinColumn(name = "servico_id", foreignKey = @ForeignKey(name = "servico_fk")))
+	@JoinTable(
+			name = "servico_concluido_servico", 
+			joinColumns = @JoinColumn(name = "servico_concluido_id", foreignKey = @ForeignKey(name = "servico_concluido_fk")), 
+			inverseJoinColumns = @JoinColumn(name = "servico_id", foreignKey = @ForeignKey(name = "servico_fk")))
 	private List<Servico> servicos;
 
 	public Long getId() {
