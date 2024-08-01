@@ -1,16 +1,15 @@
 package pphvaz.barbearia.model;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
+import java.time.LocalTime;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,8 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "agenda")
@@ -34,32 +32,40 @@ public class Agenda implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_agenda")
 	private Long id;
 
-	@Temporal(TemporalType.DATE)
-	@Column(nullable = false)
-	private Date dia;
-
 	@OneToOne
 	@JoinColumn(name = "pessoa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_fk"))
 	private Pessoa barbeiro;
 
-	@OneToMany(mappedBy = "agenda", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Set<HorariosDisponiveis> horariosDisponiveis = new HashSet<HorariosDisponiveis>();
-
+	@ElementCollection
+    @CollectionTable(
+        name = "agenda_dias_semana",
+        joinColumns = @JoinColumn(name = "agenda_id"),
+        uniqueConstraints = @UniqueConstraint(columnNames = {"agenda_id", "dia_semana"})
+    )
+    @Column(name = "dia_semana", nullable = false)
+    private List<Integer> diasAtendimento;
 	
+	@Column(nullable = false)
+	private LocalTime horarioInicioExpediente;
+	
+	@Column(nullable = false)
+	private LocalTime horarioFimExpediente;
+	
+	@Column(nullable = false)
+	private LocalTime horarioAlmoco;
+	
+	@Column(nullable = false)
+	private LocalTime duracaoAlmoco;
+	
+	@OneToMany(mappedBy = "agenda")
+	private List<MarcacaoDeServico> agendamentos;
+
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Date getDia() {
-		return dia;
-	}
-
-	public void setDia(Date dia) {
-		this.dia = dia;
 	}
 
 	public Pessoa getBarbeiro() {
@@ -70,8 +76,52 @@ public class Agenda implements Serializable {
 		this.barbeiro = barbeiro;
 	}
 
-	public Set<HorariosDisponiveis> getHorariosDisponiveis() {
-		return horariosDisponiveis;
+	public List<Integer> getDiasAtendimento() {
+		return diasAtendimento;
+	}
+
+	public void setDiasAtendimento(List<Integer> diasAtendimento) {
+		this.diasAtendimento = diasAtendimento;
+	}
+
+	public LocalTime getHorarioInicioExpediente() {
+		return horarioInicioExpediente;
+	}
+
+	public void setHorarioInicioExpediente(LocalTime horarioInicioExpediente) {
+		this.horarioInicioExpediente = horarioInicioExpediente;
+	}
+
+	public LocalTime getHorarioFimExpediente() {
+		return horarioFimExpediente;
+	}
+
+	public void setHorarioFimExpediente(LocalTime horarioFimExpediente) {
+		this.horarioFimExpediente = horarioFimExpediente;
+	}
+
+	public LocalTime getHorarioAlmoco() {
+		return horarioAlmoco;
+	}
+
+	public void setHorarioAlmoco(LocalTime horarioAlmoco) {
+		this.horarioAlmoco = horarioAlmoco;
+	}
+
+	public LocalTime getDuracaoAlmoco() {
+		return duracaoAlmoco;
+	}
+
+	public void setDuracaoAlmoco(LocalTime duracaoAlmoco) {
+		this.duracaoAlmoco = duracaoAlmoco;
+	}
+
+	public List<MarcacaoDeServico> getAgendamentos() {
+		return agendamentos;
+	}
+
+	public void setAgendamentos(List<MarcacaoDeServico> agendamentos) {
+		this.agendamentos = agendamentos;
 	}
 
 	@Override
@@ -90,5 +140,6 @@ public class Agenda implements Serializable {
 		Agenda other = (Agenda) obj;
 		return Objects.equals(id, other.id);
 	}
-
+	
+	
 }

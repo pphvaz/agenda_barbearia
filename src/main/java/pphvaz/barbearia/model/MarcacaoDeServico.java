@@ -10,6 +10,8 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,20 +26,22 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import pphvaz.barbearia.enums.StatusDeServico;
+
 @Entity
-@Table(name = "servico_concluido")
-@SequenceGenerator(name = "seq_servico_concluido", sequenceName = "seq_servico_concluido", initialValue = 1, allocationSize = 1)
-public class ServicoConcluido implements Serializable {
+@Table(name = "marcacao_de_servico")
+@SequenceGenerator(name = "seq_marcacao_de_servico", sequenceName = "seq_marcacao_de_servico", initialValue = 1, allocationSize = 1)
+public class MarcacaoDeServico implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_servico_concluido")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_marcacao_de_servico")
 	private Long id;
 
 	@Temporal(TemporalType.DATE)
 	@Column(nullable = false)
-	private Date dataDoAgendamento;
+	private Date dataDeAgendamento;
 
 	@Temporal(TemporalType.DATE)
 	@Column(nullable = false)
@@ -66,7 +70,7 @@ public class ServicoConcluido implements Serializable {
 	private Barbeiro barbeiro;
 
 	@ManyToOne
-	@JoinColumn(name = "cupom_de_desconto_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "cupom_de_desconto_fk"))
+	@JoinColumn(name = "cupom_de_desconto_id", nullable = true, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "cupom_de_desconto_fk"))
 	private CupomDeDesconto cupomDeDesconto;
 
 	@OneToOne
@@ -76,13 +80,23 @@ public class ServicoConcluido implements Serializable {
 	@OneToOne
 	@JoinColumn(name = "forma_de_pagamento_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "forma_de_pagamento_fk"))
 	private FormaDePagamento formaDePagamento;
-
+	
+	@ManyToOne
+    @JoinColumn(name = "agenda_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "agenda_fk"))
+    private Agenda agenda;
+	
+	
+	/* CRIAÇÃO DE TABELA AUXILIAR PARA INCLUIR QUANTOS SERVIÇOS FOREM NECESSÁRIOS NUMA MARCAÇÃO E ARMAZENAR */ 
 	@ManyToMany
 	@JoinTable(
-			name = "servico_concluido_servico", 
-			joinColumns = @JoinColumn(name = "servico_concluido_id", foreignKey = @ForeignKey(name = "servico_concluido_fk")), 
+			name = "marcacao_de_servico_servico", 
+			joinColumns = @JoinColumn(name = "marcacao_de_servico_id", foreignKey = @ForeignKey(name = "marcacao_de_servico_fk")), 
 			inverseJoinColumns = @JoinColumn(name = "servico_id", foreignKey = @ForeignKey(name = "servico_fk")))
 	private List<Servico> servicos;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private StatusDeServico statusDeServico;
 
 	public Long getId() {
 		return id;
@@ -92,12 +106,12 @@ public class ServicoConcluido implements Serializable {
 		this.id = id;
 	}
 
-	public Date getDataDoAgendamento() {
-		return dataDoAgendamento;
+	public Date getDataDeAgendamento() {
+		return dataDeAgendamento;
 	}
 
-	public void setDataDoAgendamento(Date dataDoAgendamento) {
-		this.dataDoAgendamento = dataDoAgendamento;
+	public void setDataDeAgendamento(Date dataDoAgendamento) {
+		this.dataDeAgendamento = dataDoAgendamento;
 	}
 
 	public Date getDataDoServico() {
@@ -193,7 +207,7 @@ public class ServicoConcluido implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ServicoConcluido other = (ServicoConcluido) obj;
+		MarcacaoDeServico other = (MarcacaoDeServico) obj;
 		return Objects.equals(id, other.id);
 	}
 

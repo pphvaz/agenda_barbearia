@@ -42,5 +42,5 @@ public class NotaFiscalServico implements Serializable {
 	
 	@OneToOne
 	@JoinColumn(name = "servico_concluido_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "servico_concluido_fk"))
-	private ServicoConcluido servicoConcluido;
+	private MarcacaoDeServico servicoConcluido;
 }

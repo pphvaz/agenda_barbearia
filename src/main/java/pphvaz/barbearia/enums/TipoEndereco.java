@@ -2,8 +2,8 @@ package pphvaz.barbearia.enums;
 
 public enum TipoEndereco {
 	
-	COBRANCA("Cobrança"),
-	RESIDENCIAL("Entrega");
+	COMERCIAL("Comercial"),
+	RESIDENCIAL("Residencial");
 	
 	private String descricao;
 	
