@@ -25,6 +25,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 
 import pphvaz.barbearia.enums.StatusDeServico;
 
@@ -89,7 +90,7 @@ public class MarcacaoDeServico implements Serializable {
 	/* CRIAÇÃO DE TABELA AUXILIAR PARA INCLUIR QUANTOS SERVIÇOS FOREM NECESSÁRIOS NUMA MARCAÇÃO E ARMAZENAR */ 
 	@ManyToMany
 	@JoinTable(
-			name = "marcacao_de_servico_servico", 
+			name = "marcacao_de_servico_servico", uniqueConstraints = @UniqueConstraint(columnNames = { "marcacao_de_servico_id", "servico_id" }, name = "servico"),
 			joinColumns = @JoinColumn(name = "marcacao_de_servico_id", foreignKey = @ForeignKey(name = "marcacao_de_servico_fk")), 
 			inverseJoinColumns = @JoinColumn(name = "servico_id", foreignKey = @ForeignKey(name = "servico_fk")))
 	private List<Servico> servicos;
