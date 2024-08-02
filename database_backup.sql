@@ -20,15 +20,15 @@ SET row_security = off;
 
 --
 -- TOC entry 3318 (class 1262 OID 17844)
--- Name: barbearia_smartbooking; Type: DATABASE; Schema: -; Owner: postgres
+-- Name: database_test; Type: DATABASE; Schema: -; Owner: postgres
 --
 
-CREATE DATABASE barbearia_smartbooking WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'C' LC_CTYPE = 'C';
+-- CREATE DATABASE database_test WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'C' LC_CTYPE = 'C';
 
 
-ALTER DATABASE barbearia_smartbooking OWNER TO postgres;
+ALTER DATABASE database_test OWNER TO postgres;
 
-\connect barbearia_smartbooking
+-- \connect database_test
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
