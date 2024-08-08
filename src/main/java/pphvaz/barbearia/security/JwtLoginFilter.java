@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -18,31 +19,30 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import pphvaz.barbearia.model.Users;
 
-public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter{
+public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 
-	
 	/* Configurando o gerenciador de autenticação */
 	public JwtLoginFilter(String url, AuthenticationManager authenticationManager) {
 
-		/* Obrigado a autenticação da URL */ 
+		/* Obrigado a autenticação da URL */
 		super(new AntPathRequestMatcher(url));
 
 		/* Gerenciador de autenticação */
 		setAuthenticationManager(authenticationManager);
 
 	}
-	
+
 	/* Retorna o usuário ao processar a autenticação */
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException, IOException, ServletException {
 
-		/* Obtem o usuario */ 
+		/* Obtem o usuario */
 		Users user = new ObjectMapper().readValue(request.getInputStream(), Users.class);
 
 		/* Retorna user com login e senha */
-		return getAuthenticationManager().
-				authenticate(new UsernamePasswordAuthenticationToken(user.getLogin(), user.getSenha()));
+		return getAuthenticationManager()
+				.authenticate(new UsernamePasswordAuthenticationToken(user.getLogin(), user.getSenha()));
 	}
 
 	@Override
@@ -56,5 +56,17 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter{
 		}
 
 	}
-	
+
+	@Override
+	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+			AuthenticationException failed) throws IOException, ServletException {
+
+		if (failed instanceof BadCredentialsException) {
+			response.getWriter().write("Usuario ou senha não encontrados");
+		} else {
+			response.getWriter().write("Falha ao logar: " + failed.getMessage());
+		}
+
+	}
+
 }
