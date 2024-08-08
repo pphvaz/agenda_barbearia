@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import pphvaz.barbearia.ApplicationContextLoad;
@@ -26,7 +27,7 @@ import pphvaz.barbearia.repository.UsersRepository;
 public class JwtTokenAutenticacaoService {
 
 	/* TEMPO DE VALIDADE PARA EXPIRAR O TOKEN 11 DIAS */
-	private static final long EXPIRATION_TIME = 950400000;
+	private static final long EXPIRATION_TIME = 1; //950400000
 
 	private static final String SECRET = "doqhwwsad1";
 
@@ -88,6 +89,9 @@ public class JwtTokenAutenticacaoService {
 		} catch (ExpiredJwtException e) {
 			
 			response.getWriter().write("Token expirado, efetue login novamente.");
+		} catch (MalformedJwtException e) {
+			
+			response.getWriter().write("Token inválido.");
 		} finally {
 			liberacaoCors(response);
 		}
